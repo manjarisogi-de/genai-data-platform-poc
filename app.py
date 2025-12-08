@@ -5,7 +5,7 @@ from data_loader import load_hybrid_data
 from vector_store import ingest_reviews 
 
 # --- 1. CONFIG MUST BE FIRST ---
-st.set_page_config(page_title="Ring Insights Agent", layout="wide")
+st.set_page_config(page_title="Internal Insights Agent", layout="wide")
 
 # --- 2. CACHED RESOURCE ---
 @st.cache_resource
@@ -28,7 +28,7 @@ def get_knowledge_base():
 
 # --- 3. MAIN APP UI ---
 def main():
-    st.title("🛡️ Ring Insights Agent")
+    st.title("🛡️ Insights Agent")
     st.caption("Powered by AWS Bedrock (Titan Embeddings + Claude 3 Haiku) & ChromaDB")
 
     # --- INITIALIZATION PHASE ---
@@ -52,7 +52,7 @@ def main():
         
         col1, col2 = st.columns([2, 1])
         with col1:
-            query = st.text_input("Ask about Ring/Camera issues:", placeholder="e.g., Is the battery life reliable in cold weather?")
+            query = st.text_input("Ask about Battery/Camera issues:", placeholder="e.g., Is the battery life reliable in cold weather?")
 
         if query:
             st.subheader("Results")
