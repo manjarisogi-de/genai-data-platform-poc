@@ -1,4 +1,4 @@
-#  Ring Insights Agent (RAG) + Semantic Data Quality Guardrail
+#   Insights Agent (RAG) + Semantic Data Quality Guardrail
 
 A GenAI Platform Prototype demonstrating **Agentic Data Quality** and **Self-Service Analytics** using the AWS Native stack.
 
