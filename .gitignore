@@ -1,0 +1,19 @@
+# Python junk
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Virtual Environment
+venv/
+env/
+
+# Data Files (We don't want to push the Vector DB binaries)
+chroma_db/
+ring_reviews/
+
+# Secrets
+.env
+.aws/
+
+# Large Data (Optional: If you want to force Synthetic mode for others)
+amazon_reviews.csv
