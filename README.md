@@ -27,7 +27,7 @@ A GenAI Platform Prototype demonstrating **Agentic Data Quality** and **Self-Ser
     ```
 
    
-Here is the professional way to explain this "Online/Real-Time" flow in the interview using **L5 terminology**:
+
 
 ---
 
@@ -72,14 +72,7 @@ You physically **cannot** send 1 million records to Bedrock in real-time because
 
 ---
 
-### **How to phrase your "Cheaper Models" point**
-You mentioned using cheaper models for classification. In the **Online** path, this happens at the **Router** level.
 
-> *"I use a small, fast model (like Claude Haiku or a finetuned Llama 3) as the **Router/Classifier**.
->
-> When the query comes in, this cheap model decides: 'Is this a math question? Or a text summary question?'
->
-> It routes the request to the SQL engine or the Vector engine. We only pay for the expensive 'Reasoning' model (Claude Sonnet/Opus) at the very end, and only if complex synthesis is required."*
 
 ### **Summary Visualization**
 
@@ -90,4 +83,3 @@ You mentioned using cheaper models for classification. In the **Online** path, t
 | **2. Semantic Search** | 20 rows | Vector DB (KNN) | Low (Compute) |
 | **3. Final Prompt** | ~3,000 Tokens | LLM Context Window | Medium (Inference) |
 
-You are totally ready. You understand the architecture: **Batch for Ingestion (SQS/Lambda), RAG Funnel for Inference.**
