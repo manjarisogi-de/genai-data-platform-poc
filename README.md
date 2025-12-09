@@ -25,3 +25,69 @@ A GenAI Platform Prototype demonstrating **Agentic Data Quality** and **Self-Ser
     ```bash
     python -m streamlit run app.py
     ```
+
+   
+Here is the professional way to explain this "Online/Real-Time" flow in the interview using **L5 terminology**:
+
+---
+
+### **The "Online" Architecture: The 4-Stage Reduction Funnel**
+
+*Optimizing for the fundamental constraint of GenAI: **The Context Window Limit.**
+
+You physically **cannot** send 1 million records to Bedrock in real-time because:
+1.  **Token Limit:** Even Claude 3 (200k tokens) can only hold about ~500 reviews max.
+2.  **Latency:** It would take minutes to process.
+3.  **Cost:** It would cost $20+ per query.*
+
+ **RAG is essentially a massive filtering funnel.**
+
+
+*"For the Real-Time path, my goal is to reduce 1 Million records down to the **'Golden 10'** that fit in the prompt. I use a 4-stage funnel:"*
+
+#### **Stage 1: Metadata Filtering (The SQL Filter)**
+*   **User Intent:** "How was the battery **last week**?"
+*   **Action:** We don't search the whole Vector DB. We apply a **Hard Filter** first.
+*   **Tech:** `WHERE timestamp > NOW() - 7 DAYS AND category = 'Battery'`.
+*   **Reduction:** 1,000,000 $\rightarrow$ 5,000 candidates.
+
+#### **Stage 2: Vector Retrieval (The Semantic Filter)**
+*   **Action:** We compare the user's query embedding against those 5,000 candidates.
+*   **Tech:** Cosine Similarity Search.
+*   **Reduction:** 5,000 $\rightarrow$ **Top 20 Chunks** (most relevant snippets).
+
+#### **Stage 3: Deterministic Tool Use (The Metric)**
+*   **Action:** As you noted, we do **not** ask the LLM to calculate the average rating from those 20 chunks (it’s bad at math).
+*   **Tech:** The Router calls a SQL Tool: `SELECT AVG(rating)...`.
+*   **Result:** A single number: "3.2 Stars".
+
+#### **Stage 4: Context Stuffing & Synthesis (The LLM)**
+*   **Action:** We construct the final prompt.
+*   **The Prompt:**
+    > "User asked about battery last week.
+    > Hard Data: Average Rating is 3.2.
+    > Relevant Reviews: [Insert the Top 20 text chunks here].
+    > Task: Summarize the reviews and use the rating to verify sentiment."
+*   **Reduction:** The LLM processes only ~4,000 tokens (fast and cheap).
+
+---
+
+### **How to phrase your "Cheaper Models" point**
+You mentioned using cheaper models for classification. In the **Online** path, this happens at the **Router** level.
+
+> *"I use a small, fast model (like Claude Haiku or a finetuned Llama 3) as the **Router/Classifier**.
+>
+> When the query comes in, this cheap model decides: 'Is this a math question? Or a text summary question?'
+>
+> It routes the request to the SQL engine or the Vector engine. We only pay for the expensive 'Reasoning' model (Claude Sonnet/Opus) at the very end, and only if complex synthesis is required."*
+
+### **Summary Visualization**
+
+| Step | Data Volume | Technology | Cost |
+| :--- | :--- | :--- | :--- |
+| **Total Data** | 1,000,000 rows | Data Lake / S3 | Storage Only |
+| **1. Metadata Filter** | 5,000 rows | Vector DB (Filter) | Low (Index lookup) |
+| **2. Semantic Search** | 20 rows | Vector DB (KNN) | Low (Compute) |
+| **3. Final Prompt** | ~3,000 Tokens | LLM Context Window | Medium (Inference) |
+
+You are totally ready. You understand the architecture: **Batch for Ingestion (SQS/Lambda), RAG Funnel for Inference.**
