@@ -57,7 +57,7 @@ You physically **cannot** send 1 million records to Bedrock in real-time because
 *   **Reduction:** 5,000 $\rightarrow$ **Top 20 Chunks** (most relevant snippets).
 
 #### **Stage 3: Deterministic Tool Use (The Metric)**
-*   **Action:** As you noted, we do **not** ask the LLM to calculate the average rating from those 20 chunks (it’s bad at math).
+*   **Action:**  we do **not** ask the LLM to calculate the average rating from those 20 chunks (it’s bad at math).
 *   **Tech:** The Router calls a SQL Tool: `SELECT AVG(rating)...`.
 *   **Result:** A single number: "3.2 Stars".
 
